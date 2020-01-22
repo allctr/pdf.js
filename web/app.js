@@ -1846,6 +1846,41 @@ function webViewerInitialized() {
       });
     });
 
+    // documentloaded is also available if needed
+    PDFViewerApplication.eventBus.on("documentinit", function(e){
+      let app = e.source
+      const queryString = document.location.search.substring(1);
+      const params = parseQueryString(queryString);
+      // trigger search
+      if(params.search) {
+        app.findBar.findField.value = params.search
+        app.findBar.highlightAll.checked = true
+        app.findBar.open()
+        app.eventBus.dispatch("find", { query: params.search, highlightAll: true })
+
+        // if requested to highlight a specific match number
+        let matchCount = parseInt(params.searchselectmatchnumber);
+        if(matchCount > 1) {
+          // wait for all matches to be found .. then trigger
+          app.findBar.eventBus.on("updatefindmatchescount", function(e){
+            if(e.source._matchesCountTotal == e.matchesCount.total) {
+              console.log("matched: " + e.source._matchesCountTotal + ", " + e.matchesCount.total)
+              // let run_event = function(){
+              //   matchCount--;
+              //   if( matchCount > 0 ) {
+              //     app.findBar.findNextButton.click();
+              //     console.log("ran one now .. schedulign next one for 5 seconds")
+              //     setTimeout(run_event, 5000)
+              //   }
+              // }
+              // console.log("scheduling for 10 seconds now..")
+              // setTimeout(run_event, 10000)
+            }
+          })
+        }
+      }
+    })
+
     // Enable draging-and-dropping a new PDF file onto the viewerContainer.
     appConfig.mainContainer.addEventListener("dragover", function(evt) {
       evt.preventDefault();
