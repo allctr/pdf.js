@@ -1761,7 +1761,8 @@ if (typeof PDFJSDev === "undefined" || PDFJSDev.test("GENERIC")) {
       // any blob:-URL. The browser's same-origin policy will block requests to
       // blob:-URLs from other origins, so this is safe.
       if (origin !== viewerOrigin && protocol !== "blob:") {
-        throw new Error("file origin does not match viewer's");
+        // HASSAN NOTE: mostly using s3 bucket .. will configure it to accept CORS
+        // throw new Error("file origin does not match viewer's");
       }
     } catch (ex) {
       const message = ex && ex.message;
