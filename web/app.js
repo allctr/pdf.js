@@ -1740,6 +1740,7 @@ if (typeof PDFJSDev === "undefined" || PDFJSDev.test("GENERIC")) {
     "null",
     "http://mozilla.github.io",
     "https://mozilla.github.io",
+    "https://hedgepo-prod.s3.amazonaws.com",
   ];
   validateFileURL = function validateFileURL(file) {
     if (file === undefined) {
