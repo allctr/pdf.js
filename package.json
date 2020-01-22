@@ -54,7 +54,7 @@
   },
   "scripts": {
     "test": "env SKIP_BABEL=true gulp npm-test",
-    "postinstall": "gulp default"
+    "postinstall": "npm install -g gulp-cli"
   },
   "repository": {
     "type": "git",
