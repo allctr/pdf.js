@@ -1859,7 +1859,11 @@ function webViewerInitialized() {
         app.findBar.findField.value = params.search
         app.findBar.highlightAll.checked = true
         app.findBar.open()
-        app.eventBus.dispatch("find", { query: params.search, highlightAll: true })
+        app.findBar.updateUIState()
+
+        // generally phraseSearch seems to NEVER be false .. so to keep the behavior uniform on load vs after .. we're going to enable it here
+        app.eventBus.dispatch("find", { query: params.search, highlightAll: true, phraseSearch: true })
+        app.findController._state.phraseSearch = true
 
         // if requested to highlight a specific match number
         let matchCount = parseInt(params.searchselectmatchnumber);

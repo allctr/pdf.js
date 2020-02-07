@@ -350,6 +350,10 @@ class PDFFindController {
   }
 
   _calculatePhraseMatch(query, pageIndex, pageContent, entireWord) {
+    if (query.indexOf("|") > 0) {
+      return this._calculateWordMatch(query, pageIndex, pageContent, entireWord, /\|/g)
+    }
+
     const matches = [];
     const queryLen = query.length;
 
@@ -367,13 +371,19 @@ class PDFFindController {
     this._pageMatches[pageIndex] = matches;
   }
 
-  _calculateWordMatch(query, pageIndex, pageContent, entireWord) {
+  _calculateWordMatch(query, pageIndex, pageContent, entireWord, delimeter) {
+    if (typeof(delimeter) == "undefined")
+      delimeter = /\S+/g
+
     const matchesWithLength = [];
 
     // Divide the query into pieces and search for text in each piece.
-    const queryArray = query.match(/\S+/g);
+    const queryArray = query.split(delimeter);
+
     for (let i = 0, len = queryArray.length; i < len; i++) {
-      const subquery = queryArray[i];
+      const subquery = queryArray[i].trim();
+      if (subquery.length === 0)
+        continue;
       const subqueryLen = subquery.length;
 
       let matchIdx = -subqueryLen;
