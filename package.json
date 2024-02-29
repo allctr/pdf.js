@@ -61,7 +61,7 @@
     "url": "git://github.com/mozilla/pdf.js.git"
   },
   "engines": {
-    "node": ">=18"
+    "node": "18.x"
   },
   "license": "Apache-2.0"
 }
