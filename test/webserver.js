@@ -159,7 +159,15 @@ WebServer.prototype = {
         return;
       }
       if (isDir) {
-        serveDirectoryIndex(filePath);
+        if( process.env["HIDE_DIR_STRUCTURE"] == '1' ) {
+          res.setHeader("Content-Type", "text/html");
+          res.writeHead(200);
+          res.write('<html><head><meta charset="utf-8"></head><body>No file to display');
+          res.end("</body></html>");
+        }
+        else {
+          serveDirectoryIndex(filePath);
+        }
         return;
       }
 
@@ -275,7 +283,7 @@ WebServer.prototype = {
         }
         if (!all && queryPart !== "side") {
           res.write(
-            "<hr><p>(only PDF files are shown, where none should show, " +
+            "<hr><p>(only PDF files are shown, " +
               '<a href="?all">show all</a>)</p>\n'
           );
         }
