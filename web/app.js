@@ -1740,8 +1740,8 @@ if (typeof PDFJSDev === "undefined" || PDFJSDev.test("GENERIC")) {
     "null",
     "http://mozilla.github.io",
     "https://mozilla.github.io",
-    "https://allocator-pdf-js-024a29db0e6c.herokuapp.com",
-    "https://pdf-viewer.allocator.com",
+    "https://allocator-pdf-js-024a29db0e6c.herokuapp.com/",
+    "https://pdf-viewer.allocator.com/",
   ];
   validateFileURL = function validateFileURL(file) {
     if (file === undefined) {
