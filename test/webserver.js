@@ -275,7 +275,7 @@ WebServer.prototype = {
         }
         if (!all && queryPart !== "side") {
           res.write(
-            "<hr><p>(only PDF files are shown, " +
+            "<hr><p>(only PDF files are shown, where none should show, " +
               '<a href="?all">show all</a>)</p>\n'
           );
         }
