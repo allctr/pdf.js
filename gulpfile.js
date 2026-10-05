@@ -1382,6 +1382,26 @@ gulp.task("server", function() {
   if (process.env.PDFJS_ENV == "production") {
     console.log("### Starting production server");
     server.root = "./build/generic"
+    // HTTP -> HTTPS (Heroku sets X-Forwarded-Proto) + security headers.
+    // frame-ancestors lists the Allocator hosts that iframe the viewer.
+    server.securityHandler = function(req, res) {
+      if (req.headers["x-forwarded-proto"] === "http") {
+        res.writeHead(301, { Location: "https://" + req.headers.host + req.url });
+        res.end();
+        return true;
+      }
+      res.setHeader("Strict-Transport-Security", "max-age=63072000; includeSubDomains");
+      res.setHeader("Content-Security-Policy", "default-src 'self'; script-src 'self'; " +
+        "style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; " +
+        "connect-src 'self' blob: https://*.amazonaws.com; worker-src 'self' blob:; " +
+        "object-src 'none'; base-uri 'self'; form-action 'self'; " +
+        "frame-ancestors https://secure.allocator.com https://secure.allocatorbeta.com " +
+        "https://allocatorbeta.com https://www.allocatorbeta.com");
+      res.setHeader("X-Content-Type-Options", "nosniff");
+      res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
+      res.setHeader("X-Robots-Tag", "noindex, nofollow, noarchive, nosnippet");
+      return false;
+    };
   }
   else
     console.log("### Starting local server");
