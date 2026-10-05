@@ -47,6 +47,7 @@ function WebServer() {
   this.verbose = false;
   this.cacheExpirationTime = 0;
   this.disableRangeRequests = false;
+  this.securityHandler = null;
   this.hooks = {
     GET: [crossOriginHandler],
     POST: [],
@@ -79,6 +80,9 @@ WebServer.prototype = {
     }
   },
   _handler: function(req, res) {
+    if (this.securityHandler && this.securityHandler(req, res)) {
+      return;
+    }
     var url = req.url.replace(/\/\//g, "/");
     var urlParts = /([^?]*)((?:\?(.*))?)/.exec(url);
     try {
